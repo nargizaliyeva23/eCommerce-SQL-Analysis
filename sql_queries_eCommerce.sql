@@ -146,28 +146,7 @@ left join delivery_time t
 group by s.seller_id
 order by total_revenue;
 
-WITH delivery_time AS (
-    SELECT 
-        oi.seller_id,
-        oi.order_id,
-        DATEDIFF(o.order_delivered_carrier_date, o.order_purchase_timestamp) AS delivery_days
-    FROM olist_order_items_dataset oi
-    JOIN olist_orders_dataset o
-        ON o.order_id = oi.order_id
-)
-SELECT 
-    s.seller_id,
-    COUNT(oi.order_id) AS total_sales,
-    ROUND(AVG(t.delivery_days), 2) AS avg_delivery_days,
-    SUM(oi.price) AS total_revenue
-FROM olist_sellers_dataset s
-LEFT JOIN olist_order_items_dataset oi
-    ON s.seller_id = oi.seller_id
-LEFT JOIN delivery_time t
-    ON oi.order_id = t.order_id
-    AND oi.seller_id = t.seller_id
-GROUP BY s.seller_id
-ORDER BY total_revenue;
+
 
 
 #Monthly Revenue + Running Total
